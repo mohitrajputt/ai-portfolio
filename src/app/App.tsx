@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { motion, useInView } from "motion/react";
 import {
@@ -28,7 +28,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-// â”€â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Data ────────────────────────────────────────────────────────────────────
 
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
@@ -45,7 +45,7 @@ const EXPERIENCE = [
     id: 1,
     company: "Regenesys Education",
     role: "Software Development Engineer@1",
-    period: "May 2026 â€” present",
+    period: "May 2026 — present",
     location: "Bengaluru, India",
     color: "#22C55E",
     description:
@@ -61,7 +61,7 @@ const EXPERIENCE = [
     id: 2,
     company: "Tech Matpatra",
     role: "Software Development Engineer",
-    period: "July 2024 â€” Apr 2026",
+    period: "July 2024 — Apr 2026",
     location: "Gurugram, India",
     color: "#F97316",
     description:
@@ -77,7 +77,7 @@ const EXPERIENCE = [
     id: 3,
     company: "Dabotics India",
     role: "Web Developer",
-    period: "July 2023 â€” Sep 2023",
+    period: "July 2023 — Sep 2023",
     location: "Remote",
     color: "var(--primary)",
     description:
@@ -126,7 +126,7 @@ const STORIES = [
     tags: ["Go", "PostgreSQL", "Kafka"],
     readTime: "12 min",
     problem:
-      "Legacy reconciliation system processing 50M daily transactions was causing 3-hour delays in merchant settlements, losing Razorpay â‚¹2Cr/month in float.",
+      "Legacy reconciliation system processing 50M daily transactions was causing 3-hour delays in merchant settlements, losing Razorpay ₹2Cr/month in float.",
     excerpt:
       "When every second of delay has a dollar cost, you learn to think in microseconds. Here is how we rebuilt the settlement engine without taking the system offline.",
   },
@@ -195,15 +195,15 @@ const BLOG_POSTS = [
 
 const TERMINAL_LINES = [
   { text: "$ whoami", delay: 0, type: "cmd" as const },
-  { text: "mohit.rajput â€” Backend & AI Engineer", delay: 550, type: "out" as const },
+  { text: "mohit.rajput — Backend & AI Engineer", delay: 550, type: "out" as const },
   { text: "$ cat expertise.txt", delay: 1300, type: "cmd" as const },
   { text: "distributed systems, API design, AI infra", delay: 1900, type: "out" as const },
   { text: "$ echo $PHILOSOPHY", delay: 2700, type: "cmd" as const },
   { text: '"Build to understand. Share what you learn."', delay: 3300, type: "out" as const },
-  { text: "$ â–ˆ", delay: 4100, type: "cursor" as const },
+  { text: "$ █", delay: 4100, type: "cursor" as const },
 ];
 
-// â”€â”€â”€ Primitives â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Primitives ───────────────────────────────────────────────────────────────
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -243,7 +243,7 @@ function FadeIn({
   );
 }
 
-// â”€â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Hero ────────────────────────────────────────────────────────────────────
 
 function HeroSection() {
   const [lines, setLines] = useState<typeof TERMINAL_LINES>([]);
@@ -309,7 +309,7 @@ function HeroSection() {
                   }}
                 />
                 <span className="text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
-                  Available for senior roles Â· Remote-first
+                  Available for senior roles · Remote-first
                 </span>
               </div>
 
@@ -324,13 +324,13 @@ function HeroSection() {
               </h1>
 
               <p className="text-lg md:text-xl leading-relaxed mb-3 max-w-lg" style={{ color: "var(--text-secondary)" }}>
-                Backend & AI Engineer. I design systems that don&#39;t just work at scale&nbsp;â€”
+                Backend & AI Engineer. I design systems that don&#39;t just work at scale&nbsp;—
                 they{" "}
                 <em className="not-italic text-foreground font-medium">stay honest</em> under pressure.
               </p>
 
               <p className="text-sm mb-10 font-mono" style={{ color: "var(--muted-foreground)" }}>
-                2+ years Â· Regenesys Education Â· Tech Matpatra 
+                2+ years · Regenesys Education · Tech Matpatra 
               </p>
 
               {/* CTAs */}
@@ -419,7 +419,7 @@ function HeroSection() {
                 <div className="size-3 rounded-full" style={{ background: "rgba(234,179,8,0.6)" }} />
                 <div className="size-3 rounded-full" style={{ background: "rgba(34,197,94,0.6)" }} />
                 <span className="ml-2 text-xs font-mono" style={{ color: "var(--muted-foreground)" }}>
-                  zsh â€” ~/workspace
+                  zsh — ~/workspace
                 </span>
               </div>
               {/* Content */}
@@ -469,7 +469,7 @@ function HeroSection() {
   );
 }
 
-// â”€â”€â”€ About â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── About ───────────────────────────────────────────────────────────────────
 
 function AboutSection() {
   const principles = [
@@ -516,8 +516,8 @@ function AboutSection() {
 
           {[
             "I spent the first year of my career obsessed with syntax and frameworks. Then a production outage at 2am taught me something no documentation had: systems fail in the gaps between what was documented and what was assumed.",
-            "Since then, my approach has shifted. I spend more time in architecture reviews and postmortems than I do in feature PRs. The most important engineering decisions are invisible to users â€” they live in consistency models, failure modes, and deployment strategies.",
-            "This portfolio is a public record of that process. Not a highlight reel â€” a working journal. The hard decisions, the wrong turns, the things I'd do differently.",
+            "Since then, my approach has shifted. I spend more time in architecture reviews and postmortems than I do in feature PRs. The most important engineering decisions are invisible to users — they live in consistency models, failure modes, and deployment strategies.",
+            "This portfolio is a public record of that process. Not a highlight reel — a working journal. The hard decisions, the wrong turns, the things I'd do differently.",
           ].map((para, i) => (
             <FadeIn key={i} delay={i * 0.1}>
               <p className="leading-relaxed mb-5 text-[15px]" style={{ color: "var(--text-secondary)" }}>
@@ -565,7 +565,7 @@ function AboutSection() {
   );
 }
 
-// â”€â”€â”€ Experience â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Experience ──────────────────────────────────────────────────────────────
 
 function ExperienceSection() {
   const [activeId, setActiveId] = useState(1);
@@ -635,7 +635,7 @@ function ExperienceSection() {
                   <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
                     {active.company}
                   </span>
-                  <span style={{ color: "var(--text-faint)" }}>Â·</span>
+                  <span style={{ color: "var(--text-faint)" }}>·</span>
                   <span
                     className="text-sm flex items-center gap-1"
                     style={{ color: "var(--muted-foreground)" }}
@@ -705,7 +705,7 @@ function ExperienceSection() {
   );
 }
 
-// â”€â”€â”€ Tech Stack â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Tech Stack ──────────────────────────────────────────────────────────────
 
 function TechStackSection() {
   return (
@@ -769,7 +769,7 @@ function TechStackSection() {
   );
 }
 
-// â”€â”€â”€ Engineering Stories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Engineering Stories ──────────────────────────────────────────────────────
 
 function StoriesSection() {
   return (
@@ -815,7 +815,7 @@ function StoriesSection() {
                     <span className="text-xs font-mono uppercase tracking-wider" style={{ color: "var(--primary)" }}>
                       {story.context}
                     </span>
-                    <span style={{ color: "var(--text-faint)" }}>Â·</span>
+                    <span style={{ color: "var(--text-faint)" }}>·</span>
                     <span className="flex items-center gap-1 text-xs" style={{ color: "var(--muted-foreground)" }}>
                       <Clock className="size-3" />
                       {story.readTime} read
@@ -876,7 +876,7 @@ function StoriesSection() {
   );
 }
 
-// â”€â”€â”€ Blog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Blog ─────────────────────────────────────────────────────────────────────
 
 function BlogSection() {
   return (
@@ -921,7 +921,7 @@ function BlogSection() {
                 <span className="text-xs font-mono" style={{ color: "var(--muted-foreground)" }}>
                   {post.date}
                 </span>
-                <span style={{ color: "var(--text-faint)" }}>Â·</span>
+                <span style={{ color: "var(--text-faint)" }}>·</span>
                 <span className="flex items-center gap-1 text-xs" style={{ color: "var(--muted-foreground)" }}>
                   <Clock className="size-3" />
                   {post.readTime}
@@ -963,7 +963,7 @@ function BlogSection() {
   );
 }
 
-// â”€â”€â”€ Contact â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Contact ─────────────────────────────────────────────────────────────────
 
 function ContactSection() {
   const links = [
@@ -1028,7 +1028,7 @@ function ContactSection() {
   );
 }
 
-// â”€â”€â”€ Theme Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Theme Toggle ────────────────────────────────────────────────────────────
 
 function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -1060,7 +1060,7 @@ function ThemeToggle() {
   );
 }
 
-// â”€â”€â”€ App â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── App ─────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -1222,10 +1222,10 @@ export default function App() {
       >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <span className="text-sm font-mono" style={{ color: "var(--muted-foreground)" }}>
-            Â© 2025 Mohit Rajput. Built with intention.
+            © 2025 Mohit Rajput. Built with intention.
           </span>
           <span className="text-xs font-mono" style={{ color: "var(--text-faint)" }}>
-            Last updated Â· Jul 2025
+            Last updated · Jul 2025
           </span>
         </div>
       </footer>
