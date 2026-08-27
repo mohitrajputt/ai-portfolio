@@ -6,6 +6,15 @@
 // into the single deployable file api/chat.js (all relative imports + JSON
 // inlined) so Node never has to resolve extensionless/relative modules at
 // runtime on Vercel.
+//
+// REQUEST MODES:
+// - Vercel's Node.js runtime invokes the function the classic Node way:
+//   handler(req, res) where `req` is an IncomingMessage (plain-object headers)
+//   and `res` is the Node ServerResponse. We convert `req` into a Fetch
+//   `Request` internally and write the resulting `Response` into `res`.
+// - The Vite dev plugin passes a browser Fetch `Request` and expects a
+//   `Response` back. We detect that and return the Response directly.
+// Both modes share the exact same core logic (handleFetchRequest) below.
 
 import {
   parseAndValidate,
@@ -34,6 +43,78 @@ function json(
       ...extraHeaders,
     },
   });
+}
+
+// ── Node IncomingMessage → Fetch Request bridge ─────────────────────────────
+type NodeLikeReq = {
+  method?: string;
+  url?: string;
+  headers?: Record<string, string | string[] | number | undefined>;
+  [Symbol.asyncIterator](): AsyncIterator<Uint8Array>;
+};
+
+function isFetchRequest(req: unknown): req is Request {
+  return Boolean(
+    req &&
+      typeof (req as Request).headers?.get === "function" &&
+      typeof (req as Request).text === "function",
+  );
+}
+
+async function readNodeBody(req: NodeLikeReq): Promise<string> {
+  const method = (req.method || "GET").toUpperCase();
+  if (method === "GET" || method === "HEAD") return "";
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk as Uint8Array));
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+async function buildFetchRequest(req: NodeLikeReq): Promise<Request> {
+  const headers = new Headers();
+  for (const [key, value] of Object.entries(req.headers ?? {})) {
+    if (Array.isArray(value)) {
+      for (const v of value) headers.append(key, v);
+    } else if (value !== undefined && value !== null) {
+      headers.set(key, String(value));
+    }
+  }
+  const host =
+    (headers.get("host") as string) ||
+    (headers.get("x-forwarded-host") as string) ||
+    "localhost";
+  const url = new URL(req.url || "/", `http://${host}`).toString();
+  const body = await readNodeBody(req);
+  return new Request(url, {
+    method: (req.method || "GET").toUpperCase(),
+    headers,
+    body: body.length ? body : undefined,
+  });
+}
+
+async function writeResponseToNode(
+  res: {
+    statusCode: number;
+    setHeader(key: string, value: string): void;
+    write(chunk: Uint8Array): boolean;
+    end(chunk?: string | Uint8Array): void;
+  },
+  response: Response,
+): Promise<void> {
+  res.statusCode = response.status;
+  for (const [key, value] of response.headers) res.setHeader(key, value);
+  if (response.body) {
+    const reader = response.body.getReader();
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      res.write(value as unknown as Uint8Array);
+    }
+    res.end();
+  } else {
+    res.end(await response.text());
+  }
 }
 
 function getClientIp(req: Request): string {
@@ -94,7 +175,8 @@ function forwardCleanedStream(upstream: Response): Response {
   });
 }
 
-export default async function handler(req: Request): Promise<Response> {
+// ── Core logic: consume a Fetch Request → produce a Fetch Response ──────────
+async function handleFetchRequest(req: Request): Promise<Response> {
   if (req.method !== "POST") {
     return json(
       { error: { code: "METHOD_NOT_ALLOWED", message: "Use POST." } },
@@ -195,4 +277,28 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   return forwardCleanedStream(upstream);
+}
+// ── Entry point (dual-mode) ─────────────────────────────────────────────────
+export default async function handler(req: unknown, res?: unknown) {
+  // Fetch-Request mode (e.g. the Vite dev plugin): return the Response.
+  if (isFetchRequest(req)) {
+    return handleFetchRequest(req);
+  }
+
+  // Node.js runtime mode: Vercel passes (req, res). Bridge → respond via res.
+  if (res && req) {
+    const request = await buildFetchRequest(req as NodeLikeReq);
+    const response = await handleFetchRequest(request);
+    await writeResponseToNode(
+      res as Parameters<typeof writeResponseToNode>[0],
+      response,
+    );
+    return;
+  }
+
+  // Neither usable form.
+  return json(
+    { error: { code: "BAD_REQUEST", message: "Unsupported request object." } },
+    400,
+  );
 }

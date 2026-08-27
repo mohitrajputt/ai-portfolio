@@ -387,6 +387,53 @@ function json(body, status, extraHeaders = {}) {
     }
   });
 }
+function isFetchRequest(req) {
+  return Boolean(
+    req && typeof req.headers?.get === "function" && typeof req.text === "function"
+  );
+}
+async function readNodeBody(req) {
+  const method = (req.method || "GET").toUpperCase();
+  if (method === "GET" || method === "HEAD") return "";
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+async function buildFetchRequest(req) {
+  const headers = new Headers();
+  for (const [key, value] of Object.entries(req.headers ?? {})) {
+    if (Array.isArray(value)) {
+      for (const v of value) headers.append(key, v);
+    } else if (value !== void 0 && value !== null) {
+      headers.set(key, String(value));
+    }
+  }
+  const host = headers.get("host") || headers.get("x-forwarded-host") || "localhost";
+  const url = new URL(req.url || "/", `http://${host}`).toString();
+  const body = await readNodeBody(req);
+  return new Request(url, {
+    method: (req.method || "GET").toUpperCase(),
+    headers,
+    body: body.length ? body : void 0
+  });
+}
+async function writeResponseToNode(res, response) {
+  res.statusCode = response.status;
+  for (const [key, value] of response.headers) res.setHeader(key, value);
+  if (response.body) {
+    const reader = response.body.getReader();
+    for (; ; ) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      res.write(value);
+    }
+    res.end();
+  } else {
+    res.end(await response.text());
+  }
+}
 function getClientIp(req) {
   const fwd = req.headers.get("x-forwarded-for");
   if (fwd) return fwd.split(",")[0].trim();
@@ -437,7 +484,7 @@ function forwardCleanedStream(upstream) {
     }
   });
 }
-async function handler(req) {
+async function handleFetchRequest(req) {
   if (req.method !== "POST") {
     return json(
       { error: { code: "METHOD_NOT_ALLOWED", message: "Use POST." } },
@@ -523,6 +570,24 @@ async function handler(req) {
     );
   }
   return forwardCleanedStream(upstream);
+}
+async function handler(req, res) {
+  if (isFetchRequest(req)) {
+    return handleFetchRequest(req);
+  }
+  if (res && req) {
+    const request = await buildFetchRequest(req);
+    const response = await handleFetchRequest(request);
+    await writeResponseToNode(
+      res,
+      response
+    );
+    return;
+  }
+  return json(
+    { error: { code: "BAD_REQUEST", message: "Unsupported request object." } },
+    400
+  );
 }
 export {
   config,
