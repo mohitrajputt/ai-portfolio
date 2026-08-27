@@ -1,0 +1,27 @@
+{
+  "name": "Mohit Rajput",
+  "title": "Backend & AI Engineer",
+  "tagline": "Backend & AI Engineer. I design systems that don't just work at scale — they stay honest under pressure.",
+  "yearsOfExperience": "2+ years in backend engineering",
+  "availability": "Available for senior backend and AI infrastructure roles, remote-first",
+  "expertise": ["distributed systems", "API design", "AI infrastructure"],
+  "location": "India (remote-friendly)",
+  "philosophy": "Build to understand. Share what you learn.",
+  "about": [
+    "I spent the first year of my career obsessed with syntax and frameworks. Then a production outage at 2am taught me something no documentation had: systems fail in the gaps between what was documented and what was assumed.",
+    "Since then, my approach has shifted. I spend more time in architecture reviews and postmortems than I do in feature PRs. The most important engineering decisions are invisible to users — they live in consistency models, failure modes, and deployment strategies.",
+    "This portfolio is a public record of that process. Not a highlight reel — a working journal. The hard decisions, the wrong turns, the things I'd do differently."
+  ],
+  "engineeringPrinciples": [
+    { "title": "Systems over syntax", "body": "Technology choices are consequences of constraints. I start with the problem, not the tool." },
+    { "title": "Make it boring", "body": "The most reliable systems are the most predictable ones. Cleverness is a liability at 3am." },
+    { "title": "Public learning", "body": "Writing about what I build sharpens my own thinking. Every post is a second draft of an architecture." },
+    { "title": "Instrument everything", "body": "You cannot reason about systems you cannot observe. Observability is a precondition, not a feature." }
+  ],
+  "highlights": [
+    { "value": "50M+", "label": "Daily transactions in systems worked on" },
+    { "value": "3", "label": "Companies" },
+    { "value": "2+", "label": "Years backend engineering" },
+    { "value": "20M+", "label": "Users impacted" }
+  ]
+}

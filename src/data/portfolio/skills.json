@@ -1,0 +1,10 @@
+{
+  "categories": {
+    "Backend": ["Nest.js", "Python", "Node.js", "FastAPI", "WebSockets"],
+    "AI & ML": ["LangChain", "OpenAI API", "Hugging Face", "PyTorch", "RAG", "Vector DBs", "Prompt Engineering"],
+    "Cloud": ["AWS", "Docker", "Kubernetes", "Serverless", "CI/CD"],
+    "Databases": ["Redis", "Neo4j", "Elasticsearch", "ChromaDB", "DynamoDB"],
+    "Architecture": ["Microservices", "Event-Driven", "CAP Theorem"],
+    "Frontend": ["React", "TypeScript", "Next.js", "Tailwind CSS"]
+  }
+}

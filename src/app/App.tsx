@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { motion, useInView } from "motion/react";
+import ChatWidget from "../components/chat/ChatWidget";
 import {
   Github,
   Linkedin,
@@ -105,7 +106,7 @@ const TECH_STACK: Record<string, { items: string[]; icon: React.ReactNode }> = {
     icon: <Cloud className="size-4" />,
   },
   Databases: {
-    items: ["Redis", "Neo4j", "Elasticsearch", "ChromDB", "DynamoDB"],
+    items: ["Redis", "Neo4j", "Elasticsearch", "ChromDB", "DynamoDB", "PostgreSQL"],
     icon: <Database className="size-4" />,
   },
   Architecture: {
@@ -309,7 +310,7 @@ function HeroSection() {
                   }}
                 />
                 <span className="text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
-                  Available for senior roles · Remote-first
+                  Ready for the Next Level · Remote-first
                 </span>
               </div>
 
@@ -459,7 +460,7 @@ function HeroSection() {
             >
               <div className="size-2 rounded-full" style={{ background: "var(--primary)" }} />
               <span className="text-xs font-mono" style={{ color: "var(--primary-text)" }}>
-                Currently building AI infra at Razorpay
+                Currently building AI infra at Regenesys Education
               </span>
             </motion.div>
           </motion.div>
@@ -1229,6 +1230,9 @@ export default function App() {
           </span>
         </div>
       </footer>
+
+      {/* AI Portfolio Assistant */}
+      <ChatWidget />
     </div>
   );
 }

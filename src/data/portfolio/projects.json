@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Rebuilding the Settlement Engine at Scale",
+    "category": "Distributed Systems",
+    "technologies": ["Go", "PostgreSQL", "Kafka"],
+    "readTime": "12 min",
+    "problem": "Legacy reconciliation system processing 50M daily transactions was causing 3-hour delays in merchant settlements, losing Razorpay ₹2Cr/month in float.",
+    "excerpt": "When every second of delay has a dollar cost, you learn to think in microseconds. Rebuilt the settlement engine without taking the system offline.",
+    "link": null
+  },
+  {
+    "title": "Building a RAG System for Internal Knowledge",
+    "category": "AI Engineering",
+    "technologies": ["Python", "LangChain", "Vector DBs", "OpenAI"],
+    "readTime": "9 min",
+    "problem": "Engineers spent 40% of their time searching internal wikis and Slack history for answers that already existed somewhere in the organization.",
+    "excerpt": "Retrieval-Augmented Generation sounds elegant in papers. In production, the devil lives in chunking strategies, embedding drift, and hallucination guardrails.",
+    "link": null
+  },
+  {
+    "title": "Designing an Event-Driven Notification System",
+    "category": "System Design",
+    "technologies": ["Node.js", "Kafka", "DynamoDB", "AWS"],
+    "readTime": "15 min",
+    "problem": "A monolith running CRON jobs couldn't scale past 100K monitored endpoints without significant latency degradation, so alert delivery was slow.",
+    "excerpt": "Moved from polling to streaming and reduced notification latency from 8 minutes to under 4 seconds for 20 million developers.",
+    "link": null
+  },
+  {
+    "title": "Conversational AI Voice Pipeline",
+    "category": "AI Engineering",
+    "technologies": ["Python", "FastAPI", "RAG", "ChromaDB", "Langchain"],
+    "readTime": "N/A",
+    "problem": "Required real-time voice interactions spanning telephony, streaming speech-to-text, LLM inference, and text-to-speech.",
+    "excerpt": "Designed an end-to-end conversational AI pipeline at Regenesys Education connecting telephony, streaming STT, LLM inference, RAG retrieval, and TTS for real-time voice interactions.",
+    "link": null
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "company": "Regenesys Education",
+    "role": "Software Development Engineer@1",
+    "period": "May 2026 — present",
+    "location": "Bengaluru, India",
+    "description": "Designed an end-to-end conversational AI pipeline connecting telephony, streaming STT, LLM inference, RAG retrieval, and TTS for real-time voice interactions.",
+    "technologies": ["Python", "FastAPI", "RAG", "ChromaDB", "Gen & Agentic AI", "Langchain"],
+    "details": [
+      "Optimized AI response latency through asynchronous processing, streaming pipelines, and efficient context retrieval.",
+      "Built Retrieval-Augmented Generation (RAG) pipelines using vector databases and semantic search to enable context-aware responses from enterprise knowledge bases.",
+      "Integrated Groq/OpenRouter-hosted LLMs with prompt orchestration and conversation memory for low-latency AI interactions."
+    ]
+  },
+  {
+    "company": "Tech Matpatra",
+    "role": "Software Development Engineer",
+    "period": "July 2024 — Apr 2026",
+    "location": "Gurugram, India",
+    "description": "Owned end-to-end feature development across frontend (React/TypeScript) and backend (NestJS, Node.js).",
+    "technologies": ["Next.js", "Nest.js", "DynamoDB", "AWS Lambda", "Neo4j", "TypeScript", "Docker", "OpenSearch"],
+    "details": [
+      "Owned end-to-end feature development across frontend (React/TypeScript) and backend (NestJS, Node.js).",
+      "Designed and implemented backend services using REST APIs and microservice patterns.",
+      "Built serverless components on AWS (Lambda, DynamoDB), improving scalability and cost efficiency."
+    ]
+  },
+  {
+    "company": "Dabotics India",
+    "role": "Web Developer",
+    "period": "July 2023 — Sep 2023",
+    "location": "Remote",
+    "description": "Worked on multiple projects, including a web application for managing drone operations and a real-time data visualization dashboard. Implemented user authentication, data storage, and API integrations to enhance functionality.",
+    "technologies": ["Node.js", "Express.js", "MongoDB", "Git", "Postman", "EC2"],
+    "details": [
+      "Enhanced overall application performance and usability by optimizing components and streamlining integration between frontend and backend.",
+      "Collaborated with team members using Git/GitHub for version control and worked in Agile sprints with Jira to track progress and meet deadlines.",
+      "Developed RESTful APIs with Node.js and Express.js, integrated MongoDB, and deployed applications on AWS EC2."
+    ]
+  }
+]
