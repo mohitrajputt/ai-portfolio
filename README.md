@@ -56,20 +56,34 @@ src/
 
 ### Deploy on Vercel
 
-1. Push this repo to GitHub and import it into **Vercel** (it will detect Vite
-   via `vercel.json`; the `api/` folder becomes serverless functions).
-2. In Vercel, set these **Environment Variables** (Project → Settings → Environment
-   Variables) — keep the real values out of git:
+1. Push this repo to GitHub and import it into **Vercel** (Add New Project →
+   Import Git Repository → select this repo). Vercel auto-detects Vite from
+   `vercel.json` (build `vite build`, output `dist`). The `api/` folder becomes
+   serverless functions.
+2. Set these **Environment Variables** in the Vercel dashboard only
+   (Project → Settings → Environment Variables). Add them as **Encrypted**.
+   Keep the real values out of git — Vercel never reads your local `.env`:
    - `GROQ_API_KEY` (required)
    - `GROQ_BASE_URL` (optional, default `https://api.groq.com/openai/v1`)
    - `GROQ_MODEL` (optional, default `llama-3.3-70b-versatile`)
    - `RATE_LIMIT_MAX` (optional, default `15` requests/IP/hour)
    - `RATE_LIMIT_WINDOW_MS` (optional, default `3600000`)
-3. Deploy. The assistant is live at `/api/chat`.
+   Apply them to at least **Production**; also tick **Preview** and
+   **Development** so preview deployments and `vercel dev` work.
+3. **Deploy → Production.** The assistant is live at `https://<project>.vercel.app/api/chat`.
+4. Verify:
+   - `curl -X POST https://<project>.vercel.app/api/chat -H "Content-Type: application/json" -d '{"messages":[{"role":"user","content":"What do you do?"}]}'`
+   - Confirm no token leaks into the bundle: after the build, `grep -r gsk_ dist/` returns nothing.
 
+> **Token protection on Vercel:** the `GROQ_API_KEY` exists only in Vercel's Encrypted
+> Environment Variables and is read server-side by `api/lib/groq.ts` via
+> `process.env.GROQ_API_KEY`. It is never sent to the browser (we deliberately did
+> not prefix it with `VITE_`, so Vite does not inline it into the static bundle).
+> Recommended: rotate to a fresh Groq key at deploy time.
+>
 > The rate limiter is in-memory per serverless instance — fine for a portfolio
-> site. For fully persistent limits use Vercel's built-in rate limiter or a
-> KV-backed store.
+> site. For fully persistent limits use Vercel's built-in rate limiter or a KV
+> store.
 
 ### Local development
 
