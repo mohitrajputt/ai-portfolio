@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
+import { useTheme } from "next-themes";
 import { motion, useInView } from "motion/react";
 import {
   Github,
@@ -15,6 +16,8 @@ import {
   ChevronRight,
   Menu,
   X,
+  Sun,
+  Moon,
   Activity,
   Layers,
   Globe,
@@ -25,7 +28,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
@@ -42,7 +45,7 @@ const EXPERIENCE = [
     id: 1,
     company: "Regenesys Education",
     role: "Software Development Engineer@1",
-    period: "May 2026 — present",
+    period: "May 2026 â€” present",
     location: "Bengaluru, India",
     color: "#22C55E",
     description:
@@ -58,7 +61,7 @@ const EXPERIENCE = [
     id: 2,
     company: "Tech Matpatra",
     role: "Software Development Engineer",
-    period: "July 2024 — Apr 2026",
+    period: "July 2024 â€” Apr 2026",
     location: "Gurugram, India",
     color: "#F97316",
     description:
@@ -74,9 +77,9 @@ const EXPERIENCE = [
     id: 3,
     company: "Dabotics India",
     role: "Web Developer",
-    period: "July 2023 — Sep 2023",
+    period: "July 2023 â€” Sep 2023",
     location: "Remote",
-    color: "#3B82F6",
+    color: "var(--primary)",
     description:
       "Working on multiple projects, including a web application for managing drone operations and a real-time data visualization dashboard. Implemented user authentication, data storage, and API integrations to enhance functionality.",
     tech: ["Node.js", "Express.js", "MongoDB", "Git", "Postman", "EC2"],
@@ -123,7 +126,7 @@ const STORIES = [
     tags: ["Go", "PostgreSQL", "Kafka"],
     readTime: "12 min",
     problem:
-      "Legacy reconciliation system processing 50M daily transactions was causing 3-hour delays in merchant settlements, losing Razorpay ₹2Cr/month in float.",
+      "Legacy reconciliation system processing 50M daily transactions was causing 3-hour delays in merchant settlements, losing Razorpay â‚¹2Cr/month in float.",
     excerpt:
       "When every second of delay has a dollar cost, you learn to think in microseconds. Here is how we rebuilt the settlement engine without taking the system offline.",
   },
@@ -192,26 +195,26 @@ const BLOG_POSTS = [
 
 const TERMINAL_LINES = [
   { text: "$ whoami", delay: 0, type: "cmd" as const },
-  { text: "mohit.rajput — Backend & AI Engineer", delay: 550, type: "out" as const },
+  { text: "mohit.rajput â€” Backend & AI Engineer", delay: 550, type: "out" as const },
   { text: "$ cat expertise.txt", delay: 1300, type: "cmd" as const },
   { text: "distributed systems, API design, AI infra", delay: 1900, type: "out" as const },
   { text: "$ echo $PHILOSOPHY", delay: 2700, type: "cmd" as const },
   { text: '"Build to understand. Share what you learn."', delay: 3300, type: "out" as const },
-  { text: "$ █", delay: 4100, type: "cursor" as const },
+  { text: "$ â–ˆ", delay: 4100, type: "cursor" as const },
 ];
 
-// ─── Primitives ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Primitives â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 mb-12">
       <span
         className="text-xs font-mono tracking-[0.2em] uppercase"
-        style={{ color: "#3B82F6" }}
+        style={{ color: "var(--primary)" }}
       >
         {children}
       </span>
-      <div className="h-px flex-1 max-w-[3rem]" style={{ background: "rgba(255,255,255,0.06)" }} />
+      <div className="h-px flex-1 max-w-[3rem]" style={{ background: "var(--border-soft)" }} />
     </div>
   );
 }
@@ -240,7 +243,7 @@ function FadeIn({
   );
 }
 
-// ─── Hero ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function HeroSection() {
   const [lines, setLines] = useState<typeof TERMINAL_LINES>([]);
@@ -278,7 +281,7 @@ function HeroSection() {
       {/* Bottom fade */}
       <div
         className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: "linear-gradient(transparent, #09090B)" }}
+        style={{ background: "linear-gradient(transparent, var(--background))" }}
       />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-12 pt-32 pb-24">
@@ -294,8 +297,8 @@ function HeroSection() {
               <div
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 border"
                 style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
+                  borderColor: "var(--border-soft)",
+                  background: "var(--hover-bg)",
                 }}
               >
                 <span
@@ -305,8 +308,8 @@ function HeroSection() {
                     boxShadow: "0 0 6px #22C55E",
                   }}
                 />
-                <span className="text-xs font-mono" style={{ color: "#A1A1AA" }}>
-                  Available for senior roles · Remote-first
+                <span className="text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
+                  Available for senior roles Â· Remote-first
                 </span>
               </div>
 
@@ -315,32 +318,32 @@ function HeroSection() {
                 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.02] tracking-tight mb-6"
                 style={{ fontFamily: "'Geist', sans-serif" }}
               >
-                <span className="text-white">Mohit</span>
+                <span className="text-foreground">Mohit</span>
                 <br />
-                <span style={{ color: "rgba(255,255,255,0.18)" }}>Rajput</span>
+                <span style={{ color: "var(--hero-faded)" }}>Rajput</span>
               </h1>
 
-              <p className="text-lg md:text-xl leading-relaxed mb-3 max-w-lg" style={{ color: "#A1A1AA" }}>
-                Backend & AI Engineer. I design systems that don&#39;t just work at scale&nbsp;—
+              <p className="text-lg md:text-xl leading-relaxed mb-3 max-w-lg" style={{ color: "var(--text-secondary)" }}>
+                Backend & AI Engineer. I design systems that don&#39;t just work at scale&nbsp;â€”
                 they{" "}
-                <em className="not-italic text-white font-medium">stay honest</em> under pressure.
+                <em className="not-italic text-foreground font-medium">stay honest</em> under pressure.
               </p>
 
-              <p className="text-sm mb-10 font-mono" style={{ color: "#71717A" }}>
-                2+ years · Regenesys Education · Tech Matpatra 
+              <p className="text-sm mb-10 font-mono" style={{ color: "var(--muted-foreground)" }}>
+                2+ years Â· Regenesys Education Â· Tech Matpatra 
               </p>
 
               {/* CTAs */}
               <div className="flex flex-wrap gap-3 mb-14">
                 <a
                   href="#stories"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:gap-3"
-                  style={{ background: "#3B82F6" }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-primary-foreground transition-all hover:gap-3"
+                  style={{ background: "var(--primary)" }}
                   onMouseEnter={(e) =>
-                    ((e.currentTarget as HTMLAnchorElement).style.background = "#2563EB")
+                    ((e.currentTarget as HTMLAnchorElement).style.background = "var(--primary-hover)")
                   }
                   onMouseLeave={(e) =>
-                    ((e.currentTarget as HTMLAnchorElement).style.background = "#3B82F6")
+                    ((e.currentTarget as HTMLAnchorElement).style.background = "var(--primary)")
                   }
                 >
                   Read Engineering Stories <ArrowRight className="size-4" />
@@ -349,18 +352,18 @@ function HeroSection() {
                   href="#contact"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all"
                   style={{
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "#A1A1AA",
+                    border: "1px solid var(--border-strong)",
+                    color: "var(--text-secondary)",
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.color = "#fff";
-                    el.style.borderColor = "rgba(255,255,255,0.2)";
+                    el.style.color = "var(--foreground)";
+                    el.style.borderColor = "var(--border-hover)";
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.color = "#A1A1AA";
-                    el.style.borderColor = "rgba(255,255,255,0.1)";
+                    el.style.color = "var(--text-secondary)";
+                    el.style.borderColor = "var(--border-strong)";
                   }}
                 >
                   Get in touch
@@ -377,12 +380,12 @@ function HeroSection() {
                 ].map((s) => (
                   <div key={s.label}>
                     <div
-                      className="text-2xl font-bold text-white"
+                      className="text-2xl font-bold text-foreground"
                       style={{ fontFamily: "'Geist', sans-serif" }}
                     >
                       {s.value}
                     </div>
-                    <div className="text-xs mt-0.5" style={{ color: "#71717A" }}>
+                    <div className="text-xs mt-0.5" style={{ color: "var(--muted-foreground)" }}>
                       {s.label}
                     </div>
                   </div>
@@ -401,22 +404,22 @@ function HeroSection() {
             <div
               className="rounded-2xl overflow-hidden"
               style={{
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(24,24,27,0.8)",
+                border: "1px solid var(--border-soft)",
+                background: "var(--terminal-bg)",
                 backdropFilter: "blur(20px)",
-                boxShadow: "0 0 60px rgba(59,130,246,0.07), 0 24px 48px rgba(0,0,0,0.5)",
+                boxShadow: "var(--terminal-shadow)",
               }}
             >
               {/* Title bar */}
               <div
                 className="flex items-center gap-2 px-4 py-3"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+                style={{ borderBottom: "1px solid var(--border-soft)" }}
               >
                 <div className="size-3 rounded-full" style={{ background: "rgba(239,68,68,0.6)" }} />
                 <div className="size-3 rounded-full" style={{ background: "rgba(234,179,8,0.6)" }} />
                 <div className="size-3 rounded-full" style={{ background: "rgba(34,197,94,0.6)" }} />
-                <span className="ml-2 text-xs font-mono" style={{ color: "#71717A" }}>
-                  zsh — ~/workspace
+                <span className="ml-2 text-xs font-mono" style={{ color: "var(--muted-foreground)" }}>
+                  zsh â€” ~/workspace
                 </span>
               </div>
               {/* Content */}
@@ -430,10 +433,10 @@ function HeroSection() {
                     style={{
                       color:
                         line.type === "cmd"
-                          ? "#FAFAFA"
+                          ? "var(--foreground)"
                           : line.type === "cursor"
-                            ? "#3B82F6"
-                            : "#A1A1AA",
+                            ? "var(--primary)"
+                            : "var(--text-secondary)",
                     }}
                     className={line.type === "cursor" ? "animate-pulse" : ""}
                   >
@@ -450,12 +453,12 @@ function HeroSection() {
               transition={{ duration: 0.5, delay: 1.2 }}
               className="mt-4 flex items-center gap-3 px-4 py-3 rounded-xl"
               style={{
-                border: "1px solid rgba(59,130,246,0.2)",
-                background: "rgba(59,130,246,0.06)",
+                border: "1px solid var(--primary-soft-border)",
+                background: "var(--primary-soft-bg)",
               }}
             >
-              <div className="size-2 rounded-full" style={{ background: "#3B82F6" }} />
-              <span className="text-xs font-mono" style={{ color: "#93C5FD" }}>
+              <div className="size-2 rounded-full" style={{ background: "var(--primary)" }} />
+              <span className="text-xs font-mono" style={{ color: "var(--primary-text)" }}>
                 Currently building AI infra at Razorpay
               </span>
             </motion.div>
@@ -466,7 +469,7 @@ function HeroSection() {
   );
 }
 
-// ─── About ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ About â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AboutSection() {
   const principles = [
@@ -502,22 +505,22 @@ function AboutSection() {
         <div>
           <FadeIn>
             <h2
-              className="text-4xl md:text-5xl font-bold text-white leading-tight mb-8"
+              className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-8"
               style={{ fontFamily: "'Geist', sans-serif" }}
             >
               I don&#39;t just write code.
               <br />
-              <span style={{ color: "rgba(255,255,255,0.4)" }}>I interrogate systems.</span>
+              <span style={{ color: "var(--heading-faded)" }}>I interrogate systems.</span>
             </h2>
           </FadeIn>
 
           {[
             "I spent the first year of my career obsessed with syntax and frameworks. Then a production outage at 2am taught me something no documentation had: systems fail in the gaps between what was documented and what was assumed.",
-            "Since then, my approach has shifted. I spend more time in architecture reviews and postmortems than I do in feature PRs. The most important engineering decisions are invisible to users — they live in consistency models, failure modes, and deployment strategies.",
-            "This portfolio is a public record of that process. Not a highlight reel — a working journal. The hard decisions, the wrong turns, the things I'd do differently.",
+            "Since then, my approach has shifted. I spend more time in architecture reviews and postmortems than I do in feature PRs. The most important engineering decisions are invisible to users â€” they live in consistency models, failure modes, and deployment strategies.",
+            "This portfolio is a public record of that process. Not a highlight reel â€” a working journal. The hard decisions, the wrong turns, the things I'd do differently.",
           ].map((para, i) => (
             <FadeIn key={i} delay={i * 0.1}>
-              <p className="leading-relaxed mb-5 text-[15px]" style={{ color: "#A1A1AA" }}>
+              <p className="leading-relaxed mb-5 text-[15px]" style={{ color: "var(--text-secondary)" }}>
                 {para}
               </p>
             </FadeIn>
@@ -530,25 +533,25 @@ function AboutSection() {
               <div
                 className="p-5 rounded-2xl transition-all group cursor-default"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  background: "#18181B",
+                  border: "1px solid var(--border-soft)",
+                  background: "var(--card)",
                 }}
                 onMouseEnter={(e) =>
                 ((e.currentTarget as HTMLDivElement).style.borderColor =
-                  "rgba(255,255,255,0.12)")
+                  "var(--border-hover)")
                 }
                 onMouseLeave={(e) =>
                 ((e.currentTarget as HTMLDivElement).style.borderColor =
-                  "rgba(255,255,255,0.06)")
+                  "var(--border-soft)")
                 }
               >
                 <div className="flex items-start gap-4">
-                  <div className="shrink-0 mt-0.5" style={{ color: "#3B82F6" }}>
+                  <div className="shrink-0 mt-0.5" style={{ color: "var(--primary)" }}>
                     {p.icon}
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-sm mb-1.5">{p.title}</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: "#71717A" }}>
+                    <h3 className="text-foreground font-semibold text-sm mb-1.5">{p.title}</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
                       {p.body}
                     </p>
                   </div>
@@ -562,7 +565,7 @@ function AboutSection() {
   );
 }
 
-// ─── Experience ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Experience â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ExperienceSection() {
   const [activeId, setActiveId] = useState(1);
@@ -573,7 +576,7 @@ function ExperienceSection() {
       <FadeIn>
         <SectionLabel>Experience</SectionLabel>
         <h2
-          className="text-4xl md:text-5xl font-bold text-white leading-tight mb-16"
+          className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-16"
           style={{ fontFamily: "'Geist', sans-serif" }}
         >
           Where I&#39;ve worked
@@ -591,16 +594,16 @@ function ExperienceSection() {
                 style={{
                   border:
                     activeId === exp.id
-                      ? "1px solid rgba(255,255,255,0.1)"
+                      ? "1px solid var(--border-strong)"
                       : "1px solid transparent",
-                  background: activeId === exp.id ? "#18181B" : "transparent",
+                  background: activeId === exp.id ? "var(--card)" : "transparent",
                 }}
               >
                 <div className="flex items-center gap-3">
                   <div className="size-2 rounded-full shrink-0" style={{ background: exp.color }} />
                   <div>
-                    <div className="text-white font-medium text-sm">{exp.company}</div>
-                    <div className="text-xs mt-0.5" style={{ color: "#71717A" }}>
+                    <div className="text-foreground font-medium text-sm">{exp.company}</div>
+                    <div className="text-xs mt-0.5" style={{ color: "var(--muted-foreground)" }}>
                       {exp.period}
                     </div>
                   </div>
@@ -618,43 +621,43 @@ function ExperienceSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="p-8 rounded-2xl"
-            style={{ border: "1px solid rgba(255,255,255,0.08)", background: "#18181B" }}
+            style={{ border: "1px solid var(--border-soft)", background: "var(--card)" }}
           >
             <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
               <div>
                 <h3
-                  className="text-white font-bold text-xl"
+                  className="text-foreground font-bold text-xl"
                   style={{ fontFamily: "'Geist', sans-serif" }}
                 >
                   {active.role}
                 </h3>
                 <div className="flex items-center gap-2 mt-1.5">
-                  <span className="text-sm" style={{ color: "#A1A1AA" }}>
+                  <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
                     {active.company}
                   </span>
-                  <span style={{ color: "#3F3F46" }}>·</span>
+                  <span style={{ color: "var(--text-faint)" }}>Â·</span>
                   <span
                     className="text-sm flex items-center gap-1"
-                    style={{ color: "#71717A" }}
+                    style={{ color: "var(--muted-foreground)" }}
                   >
                     <MapPin className="size-3" />
                     {active.location}
                   </span>
                 </div>
               </div>
-              <span className="text-xs font-mono" style={{ color: "#71717A" }}>
+              <span className="text-xs font-mono" style={{ color: "var(--muted-foreground)" }}>
                 {active.period}
               </span>
             </div>
 
-            <p className="text-sm leading-relaxed mb-6" style={{ color: "#A1A1AA" }}>
+            <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--text-secondary)" }}>
               {active.description}
             </p>
 
             <div className="mb-6">
               <div
                 className="text-xs font-mono uppercase tracking-widest mb-3"
-                style={{ color: "#71717A" }}
+                style={{ color: "var(--muted-foreground)" }}
               >
                 Technologies
               </div>
@@ -664,9 +667,9 @@ function ExperienceSection() {
                     key={t}
                     className="px-2.5 py-1 rounded-lg text-xs"
                     style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                      color: "#A1A1AA",
+                      background: "var(--chip-bg)",
+                      border: "1px solid var(--border-soft)",
+                      color: "var(--text-secondary)",
                     }}
                   >
                     {t}
@@ -678,7 +681,7 @@ function ExperienceSection() {
             <div>
               <div
                 className="text-xs font-mono uppercase tracking-widest mb-3"
-                style={{ color: "#71717A" }}
+                style={{ color: "var(--muted-foreground)" }}
               >
                 Key Learnings
               </div>
@@ -687,9 +690,9 @@ function ExperienceSection() {
                   <li
                     key={i}
                     className="flex items-start gap-2.5 text-sm"
-                    style={{ color: "#A1A1AA" }}
+                    style={{ color: "var(--text-secondary)" }}
                   >
-                    <ChevronRight className="size-4 mt-0.5 shrink-0" style={{ color: "#3B82F6" }} />
+                    <ChevronRight className="size-4 mt-0.5 shrink-0" style={{ color: "var(--primary)" }} />
                     {l}
                   </li>
                 ))}
@@ -702,7 +705,7 @@ function ExperienceSection() {
   );
 }
 
-// ─── Tech Stack ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Tech Stack â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function TechStackSection() {
   return (
@@ -710,12 +713,12 @@ function TechStackSection() {
       <FadeIn>
         <SectionLabel>Tech Stack</SectionLabel>
         <h2
-          className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4"
+          className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4"
           style={{ fontFamily: "'Geist', sans-serif" }}
         >
           Tools I trust in production
         </h2>
-        <p className="max-w-xl mb-16 text-[15px]" style={{ color: "#A1A1AA" }}>
+        <p className="max-w-xl mb-16 text-[15px]" style={{ color: "var(--text-secondary)" }}>
           No progress bars. No ratings. These are technologies I have shipped with, debugged in
           production, and would reach for again.
         </p>
@@ -727,21 +730,21 @@ function TechStackSection() {
             <div
               className="p-6 rounded-2xl h-full transition-all"
               style={{
-                border: "1px solid rgba(255,255,255,0.06)",
-                background: "#18181B",
+                border: "1px solid var(--border-soft)",
+                background: "var(--card)",
               }}
               onMouseEnter={(e) =>
               ((e.currentTarget as HTMLDivElement).style.borderColor =
-                "rgba(255,255,255,0.1)")
+                "var(--border-strong)")
               }
               onMouseLeave={(e) =>
               ((e.currentTarget as HTMLDivElement).style.borderColor =
-                "rgba(255,255,255,0.06)")
+                "var(--border-soft)")
               }
             >
               <div className="flex items-center gap-2 mb-4">
-                <span style={{ color: "#3B82F6" }}>{icon}</span>
-                <span className="text-white font-semibold text-sm">{category}</span>
+                <span style={{ color: "var(--primary)" }}>{icon}</span>
+                <span className="text-foreground font-semibold text-sm">{category}</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {items.map((item) => (
@@ -749,9 +752,9 @@ function TechStackSection() {
                     key={item}
                     className="px-2.5 py-1 rounded-lg text-xs transition-colors cursor-default"
                     style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.05)",
-                      color: "#A1A1AA",
+                      background: "var(--chip-bg)",
+                      border: "1px solid var(--chip-border)",
+                      color: "var(--text-secondary)",
                     }}
                   >
                     {item}
@@ -766,7 +769,7 @@ function TechStackSection() {
   );
 }
 
-// ─── Engineering Stories ──────────────────────────────────────────────────────
+// â”€â”€â”€ Engineering Stories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StoriesSection() {
   return (
@@ -775,14 +778,14 @@ function StoriesSection() {
         <SectionLabel>Engineering Stories</SectionLabel>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-16">
           <h2
-            className="text-4xl md:text-5xl font-bold text-white leading-tight"
+            className="text-4xl md:text-5xl font-bold text-foreground leading-tight"
             style={{ fontFamily: "'Geist', sans-serif" }}
           >
             Real problems.
             <br />
             Honest decisions.
           </h2>
-          <span className="text-sm hidden md:block" style={{ color: "#71717A" }}>
+          <span className="text-sm hidden md:block" style={{ color: "var(--muted-foreground)" }}>
             Not a portfolio of demos.
           </span>
         </div>
@@ -794,26 +797,26 @@ function StoriesSection() {
             <div
               className="group p-8 rounded-2xl cursor-pointer transition-all"
               style={{
-                border: "1px solid rgba(255,255,255,0.06)",
-                background: "#18181B",
+                border: "1px solid var(--border-soft)",
+                background: "var(--card)",
               }}
               onMouseEnter={(e) =>
               ((e.currentTarget as HTMLDivElement).style.borderColor =
-                "rgba(255,255,255,0.12)")
+                "var(--border-hover)")
               }
               onMouseLeave={(e) =>
               ((e.currentTarget as HTMLDivElement).style.borderColor =
-                "rgba(255,255,255,0.06)")
+                "var(--border-soft)")
               }
             >
               <div className="flex flex-wrap items-start justify-between gap-6">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="text-xs font-mono uppercase tracking-wider" style={{ color: "#3B82F6" }}>
+                    <span className="text-xs font-mono uppercase tracking-wider" style={{ color: "var(--primary)" }}>
                       {story.context}
                     </span>
-                    <span style={{ color: "#3F3F46" }}>·</span>
-                    <span className="flex items-center gap-1 text-xs" style={{ color: "#71717A" }}>
+                    <span style={{ color: "var(--text-faint)" }}>Â·</span>
+                    <span className="flex items-center gap-1 text-xs" style={{ color: "var(--muted-foreground)" }}>
                       <Clock className="size-3" />
                       {story.readTime} read
                     </span>
@@ -823,20 +826,20 @@ function StoriesSection() {
                     className="font-bold text-xl mb-3 leading-snug transition-colors"
                     style={{
                       fontFamily: "'Geist', sans-serif",
-                      color: "#FAFAFA",
+                      color: "var(--foreground)",
                     }}
                   >
                     {story.title}
                   </h3>
 
-                  <p className="text-sm mb-2" style={{ color: "#71717A" }}>
-                    <span className="font-medium" style={{ color: "#A1A1AA" }}>
+                  <p className="text-sm mb-2" style={{ color: "var(--muted-foreground)" }}>
+                    <span className="font-medium" style={{ color: "var(--text-secondary)" }}>
                       Problem:{" "}
                     </span>
                     {story.problem}
                   </p>
 
-                  <p className="text-sm leading-relaxed" style={{ color: "#71717A" }}>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
                     {story.excerpt}
                   </p>
                 </div>
@@ -848,9 +851,9 @@ function StoriesSection() {
                         key={t}
                         className="px-2 py-0.5 rounded text-xs"
                         style={{
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.05)",
-                          color: "#71717A",
+                          background: "var(--chip-bg)",
+                          border: "1px solid var(--chip-border)",
+                          color: "var(--muted-foreground)",
                         }}
                       >
                         {t}
@@ -859,7 +862,7 @@ function StoriesSection() {
                   </div>
                   <div
                     className="flex items-center gap-1.5 text-sm font-medium"
-                    style={{ color: "#3B82F6" }}
+                    style={{ color: "var(--primary)" }}
                   >
                     Read full story <ArrowRight className="size-4" />
                   </div>
@@ -873,7 +876,7 @@ function StoriesSection() {
   );
 }
 
-// ─── Blog ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Blog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function BlogSection() {
   return (
@@ -882,14 +885,14 @@ function BlogSection() {
         <SectionLabel>Blog</SectionLabel>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-16">
           <h2
-            className="text-4xl md:text-5xl font-bold text-white leading-tight"
+            className="text-4xl md:text-5xl font-bold text-foreground leading-tight"
             style={{ fontFamily: "'Geist', sans-serif" }}
           >
             Engineering notes
           </h2>
           <button
             className="hidden md:flex items-center gap-2 text-sm font-medium transition-colors"
-            style={{ color: "#3B82F6" }}
+            style={{ color: "var(--primary)" }}
           >
             All posts <ArrowRight className="size-4" />
           </button>
@@ -902,24 +905,24 @@ function BlogSection() {
             <article
               className="group p-6 rounded-2xl cursor-pointer transition-all flex flex-col h-full"
               style={{
-                border: "1px solid rgba(255,255,255,0.06)",
-                background: "#18181B",
+                border: "1px solid var(--border-soft)",
+                background: "var(--card)",
               }}
               onMouseEnter={(e) =>
               ((e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(255,255,255,0.12)")
+                "var(--border-hover)")
               }
               onMouseLeave={(e) =>
               ((e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(255,255,255,0.06)")
+                "var(--border-soft)")
               }
             >
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-xs font-mono" style={{ color: "#71717A" }}>
+                <span className="text-xs font-mono" style={{ color: "var(--muted-foreground)" }}>
                   {post.date}
                 </span>
-                <span style={{ color: "#3F3F46" }}>·</span>
-                <span className="flex items-center gap-1 text-xs" style={{ color: "#71717A" }}>
+                <span style={{ color: "var(--text-faint)" }}>Â·</span>
+                <span className="flex items-center gap-1 text-xs" style={{ color: "var(--muted-foreground)" }}>
                   <Clock className="size-3" />
                   {post.readTime}
                 </span>
@@ -927,12 +930,12 @@ function BlogSection() {
 
               <h3
                 className="font-semibold text-lg mb-3 leading-snug flex-1 transition-colors"
-                style={{ color: "#FAFAFA", fontFamily: "'Geist', sans-serif" }}
+                style={{ color: "var(--foreground)", fontFamily: "'Geist', sans-serif" }}
               >
                 {post.title}
               </h3>
 
-              <p className="text-sm leading-relaxed mb-5" style={{ color: "#71717A" }}>
+              <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--muted-foreground)" }}>
                 {post.excerpt}
               </p>
 
@@ -942,9 +945,9 @@ function BlogSection() {
                     key={t}
                     className="px-2.5 py-1 rounded-lg text-xs flex items-center gap-1"
                     style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.05)",
-                      color: "#71717A",
+                      background: "var(--chip-bg)",
+                      border: "1px solid var(--chip-border)",
+                      color: "var(--muted-foreground)",
                     }}
                   >
                     <Tag className="size-3" />
@@ -960,7 +963,7 @@ function BlogSection() {
   );
 }
 
-// ─── Contact ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Contact â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ContactSection() {
   const links = [
@@ -976,14 +979,14 @@ function ContactSection() {
         <FadeIn>
           <SectionLabel>Contact</SectionLabel>
           <h2
-            className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6"
+            className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6"
             style={{ fontFamily: "'Geist', sans-serif" }}
           >
             Let&#39;s build something
             <br />
-            <span style={{ color: "rgba(255,255,255,0.3)" }}>worth understanding.</span>
+            <span style={{ color: "var(--heading-faded-strong)" }}>worth understanding.</span>
           </h2>
-          <p className="leading-relaxed mb-12 text-[15px]" style={{ color: "#A1A1AA" }}>
+          <p className="leading-relaxed mb-12 text-[15px]" style={{ color: "var(--text-secondary)" }}>
             I am open to senior backend and AI infrastructure roles. If you are building something
             technically interesting and care about engineering culture, I&#39;d like to hear about it.
           </p>
@@ -996,24 +999,24 @@ function ContactSection() {
                 key={link.label}
                 className="flex flex-col items-center gap-2.5 p-5 rounded-2xl transition-all"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  background: "#18181B",
+                  border: "1px solid var(--border-soft)",
+                  background: "var(--card)",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLButtonElement;
-                  el.style.borderColor = "rgba(255,255,255,0.14)";
-                  el.style.background = "rgba(255,255,255,0.03)";
+                  el.style.borderColor = "var(--border-hover)";
+                  el.style.background = "var(--hover-bg)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLButtonElement;
-                  el.style.borderColor = "rgba(255,255,255,0.06)";
-                  el.style.background = "#18181B";
+                  el.style.borderColor = "var(--border-soft)";
+                  el.style.background = "var(--card)";
                 }}
                 onClick={() => window.open(link.link, "_blank")}
               >
-                <span style={{ color: "#A1A1AA" }}>{link.icon}</span>
-                <span className="text-white text-sm font-medium">{link.label}</span>
-                <span className="text-xs" style={{ color: "#71717A" }}>
+                <span style={{ color: "var(--text-secondary)" }}>{link.icon}</span>
+                <span className="text-foreground text-sm font-medium">{link.label}</span>
+                <span className="text-xs" style={{ color: "var(--muted-foreground)" }}>
                   {link.handle}
                 </span>
               </button>
@@ -1025,7 +1028,39 @@ function ContactSection() {
   );
 }
 
-// ─── App ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Theme Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+function ThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+  return (
+    <button
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label="Toggle dark / light theme"
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className="inline-flex items-center justify-center p-2 rounded-xl transition-all"
+      style={{
+        color: "var(--text-secondary)",
+        border: "1px solid var(--border-soft)",
+        background: "transparent",
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLButtonElement;
+        el.style.borderColor = "var(--border-hover)";
+        el.style.color = "var(--foreground)";
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLButtonElement;
+        el.style.borderColor = "var(--border-soft)";
+        el.style.color = "var(--text-secondary)";
+      }}
+    >
+      {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+    </button>
+  );
+}
+
+// â”€â”€â”€ App â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -1058,14 +1093,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: "#09090B", color: "#FAFAFA" }}>
+    <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
       {/* Scroll progress bar */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[2px]">
         <div
           className="h-full transition-all duration-100"
           style={{
             width: `${scrollProgress * 100}%`,
-            background: "linear-gradient(90deg, #3B82F6, #60A5FA)",
+            background: "linear-gradient(90deg, var(--primary), #60A5FA)",
           }}
         />
       </div>
@@ -1074,8 +1109,8 @@ export default function App() {
       <header
         className="fixed top-0 left-0 right-0 z-50"
         style={{
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          background: "rgba(9,9,11,0.88)",
+          borderBottom: "1px solid var(--border-soft)",
+          background: "var(--nav-bg)",
           backdropFilter: "blur(20px)",
         }}
       >
@@ -1083,10 +1118,10 @@ export default function App() {
           {/* Logo */}
           <button
             onClick={() => scrollTo("home")}
-            className="font-bold text-sm tracking-tight text-white"
+            className="font-bold text-sm tracking-tight text-foreground"
             style={{ fontFamily: "'Geist', sans-serif" }}
           >
-            MR<span style={{ color: "#3B82F6" }}>.</span>
+            MR<span style={{ color: "var(--primary)" }}>.</span>
           </button>
 
           {/* Desktop nav */}
@@ -1097,9 +1132,9 @@ export default function App() {
                 onClick={() => scrollTo(item.id)}
                 className="px-3.5 py-1.5 rounded-lg text-sm transition-all"
                 style={{
-                  color: activeSection === item.id ? "#FAFAFA" : "#A1A1AA",
+                  color: activeSection === item.id ? "var(--foreground)" : "var(--text-secondary)",
                   background:
-                    activeSection === item.id ? "rgba(255,255,255,0.06)" : "transparent",
+                    activeSection === item.id ? "var(--border-soft)" : "transparent",
                 }}
               >
                 {item.label}
@@ -1108,15 +1143,16 @@ export default function App() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <button
               onClick={() => scrollTo("contact")}
-              className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white transition-all"
-              style={{ background: "#3B82F6" }}
+              className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-primary-foreground transition-all"
+              style={{ background: "var(--primary)" }}
               onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background = "#2563EB")
+                ((e.currentTarget as HTMLButtonElement).style.background = "var(--primary-hover)")
               }
               onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background = "#3B82F6")
+                ((e.currentTarget as HTMLButtonElement).style.background = "var(--primary)")
               }
             >
               Hire me
@@ -1125,7 +1161,7 @@ export default function App() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden p-1.5 transition-colors"
-              style={{ color: "#A1A1AA" }}
+              style={{ color: "var(--text-secondary)" }}
             >
               {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
@@ -1140,8 +1176,8 @@ export default function App() {
             exit={{ opacity: 0 }}
             className="md:hidden px-6 py-4"
             style={{
-              borderTop: "1px solid rgba(255,255,255,0.06)",
-              background: "rgba(9,9,11,0.96)",
+              borderTop: "1px solid var(--border-soft)",
+              background: "var(--mobile-bg)",
               backdropFilter: "blur(20px)",
             }}
           >
@@ -1151,8 +1187,8 @@ export default function App() {
                 onClick={() => scrollTo(item.id)}
                 className="w-full text-left py-3 text-sm transition-colors"
                 style={{
-                  borderBottom: "1px solid rgba(255,255,255,0.04)",
-                  color: activeSection === item.id ? "#FAFAFA" : "#A1A1AA",
+                  borderBottom: "1px solid var(--chip-bg)",
+                  color: activeSection === item.id ? "var(--foreground)" : "var(--text-secondary)",
                 }}
               >
                 {item.label}
@@ -1165,31 +1201,31 @@ export default function App() {
       {/* Main */}
       <main>
         <HeroSection />
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }} />
+        <div style={{ borderTop: "1px solid var(--chip-bg)" }} />
         <AboutSection />
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }} />
+        <div style={{ borderTop: "1px solid var(--chip-bg)" }} />
         <ExperienceSection />
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }} />
+        <div style={{ borderTop: "1px solid var(--chip-bg)" }} />
         <TechStackSection />
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }} />
+        <div style={{ borderTop: "1px solid var(--chip-bg)" }} />
         <StoriesSection />
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }} />
+        <div style={{ borderTop: "1px solid var(--chip-bg)" }} />
         <BlogSection />
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }} />
+        <div style={{ borderTop: "1px solid var(--chip-bg)" }} />
         <ContactSection />
       </main>
 
       {/* Footer */}
       <footer
         className="py-8 px-6 lg:px-12"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+        style={{ borderTop: "1px solid var(--chip-bg)" }}
       >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-sm font-mono" style={{ color: "#71717A" }}>
-            © 2025 Mohit Rajput. Built with intention.
+          <span className="text-sm font-mono" style={{ color: "var(--muted-foreground)" }}>
+            Â© 2025 Mohit Rajput. Built with intention.
           </span>
-          <span className="text-xs font-mono" style={{ color: "#3F3F46" }}>
-            Last updated · Jul 2025
+          <span className="text-xs font-mono" style={{ color: "var(--text-faint)" }}>
+            Last updated Â· Jul 2025
           </span>
         </div>
       </footer>
