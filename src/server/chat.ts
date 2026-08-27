@@ -1,6 +1,11 @@
 // Vercel serverless function: POST /api/chat
 // Handles validation, rate limiting, and streaming of the AI Portfolio
 // Assistant's response. The Groq API key stays server-side only.
+//
+// NOTE: This file is the SOURCE. It is bundled by scripts/build-server.mjs
+// into the single deployable file api/chat.js (all relative imports + JSON
+// inlined) so Node never has to resolve extensionless/relative modules at
+// runtime on Vercel.
 
 import {
   parseAndValidate,

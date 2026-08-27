@@ -1,17 +1,19 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Assembles the assistant's system message from the "single source of truth"
 // portfolio data (src/data/portfolio/*.json) and the dedicated system prompt
-// (api/prompts/systemPrompt.ts).
+// (src/server/prompts/systemPrompt.ts). These imports are inlined (bundled) by
+// esbuild into the single deployable api/chat.js — they never need a runtime
+// filesystem lookup on Vercel.
 // ─────────────────────────────────────────────────────────────────────────────
 // @ts-nocheck — the JSON modules are plain data; dynamic access is intended.
 
-import profile from "../../src/data/portfolio/profile.json";
-import experience from "../../src/data/portfolio/experience.json";
-import projects from "../../src/data/portfolio/projects.json";
-import skills from "../../src/data/portfolio/skills.json";
-import education from "../../src/data/portfolio/education.json";
-import achievements from "../../src/data/portfolio/achievements.json";
-import contact from "../../src/data/portfolio/contact.json";
+import profile from "../../../src/data/portfolio/profile.json";
+import experience from "../../../src/data/portfolio/experience.json";
+import projects from "../../../src/data/portfolio/projects.json";
+import skills from "../../../src/data/portfolio/skills.json";
+import education from "../../../src/data/portfolio/education.json";
+import achievements from "../../../src/data/portfolio/achievements.json";
+import contact from "../../../src/data/portfolio/contact.json";
 import { SYSTEM_PROMPT_TEMPLATE } from "../prompts/systemPrompt";
 
 export function buildKnowledge(): string {

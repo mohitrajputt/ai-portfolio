@@ -3,7 +3,7 @@
 //
 // This is intentionally a separate file so the instructions are easy to read
 // and edit without touching the API route. The {{OWNER_NAME}} and {{KNOWLEDGE}}
-// placeholders are replaced at request time in api/lib/knowledge.ts.
+// placeholders are replaced at request time in server/lib/knowledge.ts.
 // ─────────────────────────────────────────────────────────────────────────────
 export const SYSTEM_PROMPT_TEMPLATE = `
 You are the AI assistant for {{OWNER_NAME}}'s personal portfolio.

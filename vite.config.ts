@@ -18,7 +18,8 @@ function figmaAssetResolver() {
 
 // Dev-only plugin that serves the serverless /api/chat function locally so the
 // AI assistant works under `npm run dev` without needing `vercel dev`. It reuses
-// the exact same handler (api/chat.ts) that runs on Vercel in production.
+// the exact same handler (src/server/chat.ts) that runs on Vercel in production
+// (bundled to api/chat.js at build time).
 //
 // The production API needs the Groq key from .env, so we also load every .env
 // key (including non-VITE_ secrets like GROQ_API_KEY) into process.env here.
@@ -54,7 +55,7 @@ async function handleChatRequest(server, req, res): Promise<void> {
   const rawBody = Buffer.concat(chunks).toString('utf8')
 
   // Load the handler through Vite so its TS and JSON imports are transformed.
-  const mod = await server.ssrLoadModule('/api/chat.ts')
+  const mod = await server.ssrLoadModule('/src/server/chat.ts')
   const handler = mod.default
 
   // Build a Fetch API Request from the connect IncomingMessage.
