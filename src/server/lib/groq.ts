@@ -17,7 +17,6 @@ export class GroqConfigError extends Error {
 const BASE_URL = (process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
 const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 const API_KEY = process.env.GROQ_API_KEY || "";
-console.log("GROQ_API_KEY is set:", API_KEY.length > 0);
 
 export function isConfigured(): boolean {
   return API_KEY.length > 0;
