@@ -16,7 +16,12 @@ export class GroqConfigError extends Error {
 
 const BASE_URL = (process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
 const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
-const API_KEY = process.env.GROQ_API_KEY || "";
+// .trim() guards against stray spaces/newlines accidentally pasted into the
+// Vercel environment variable value (Vercel stores the value as-is).
+const API_KEY = (process.env.GROQ_API_KEY || "").trim();
+// Boot log for Vercel runtime logs. Never logs the key itself — only whether
+// it is present and its length (a real Groq key is ~56 chars, prefix "gsk_").
+console.log("GROQ key check: set =", API_KEY.length > 0, "| length =", API_KEY.length);
 
 export function isConfigured(): boolean {
   return API_KEY.length > 0;
