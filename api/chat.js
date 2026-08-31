@@ -348,7 +348,7 @@ var GroqConfigError = class extends Error {
   }
 };
 var BASE_URL = (process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
-var MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+var MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 var API_KEY = (process.env.GROQ_API_KEY || "").trim();
 console.log("GROQ key check: set =", API_KEY.length > 0, "| length =", API_KEY.length);
 function isConfigured() {

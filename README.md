@@ -72,7 +72,7 @@ scripts/
    Keep the real values out of git — Vercel never reads your local `.env`:
    - `GROQ_API_KEY` (required)
    - `GROQ_BASE_URL` (optional, default `https://api.groq.com/openai/v1`)
-   - `GROQ_MODEL` (optional, default `llama-3.3-70b-versatile`)
+   - `GROQ_MODEL` (optional, default `openai/gpt-oss-20b`)
    - `RATE_LIMIT_MAX` (optional, default `15` requests/IP/hour)
    - `RATE_LIMIT_WINDOW_MS` (optional, default `3600000`)
    Apply them to at least **Production**; also tick **Preview** and

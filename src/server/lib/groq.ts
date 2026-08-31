@@ -15,7 +15,7 @@ export class GroqConfigError extends Error {
 }
 
 const BASE_URL = (process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
-const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+const MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 // .trim() guards against stray spaces/newlines accidentally pasted into the
 // Vercel environment variable value (Vercel stores the value as-is).
 const API_KEY = (process.env.GROQ_API_KEY || "").trim();
